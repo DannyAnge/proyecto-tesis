@@ -28,7 +28,7 @@ class Facturacion {
   }
 
   getProductoPorNombre(dato) {
-    fetch("/busquedaPorNombre", {
+    fetch("/facturacion/busquedaPorNombre", {
       headers: {
         "Content-Type": "application/json",
       },
@@ -73,7 +73,7 @@ class Facturacion {
   }
 
   guardarFactura() {
-    fetch("/guardarFactura", {
+    fetch("/facturacion/guardar", {
       headers: {
         "Content-Type": "application/json",
       },
@@ -131,7 +131,7 @@ class Facturacion {
     if (this.banderin) {
       this.codigoBarra = data.get("codigoBarraFacturacion");
     }
-    fetch("/getProducto", {
+    fetch("/facturacion/getProducto", {
       headers: {
         "Content-Type": "application/json",
       },
@@ -143,6 +143,7 @@ class Facturacion {
       .then((producto) => producto.json())
       .then((producto) => {
         this.calculos(producto[0]);
+        this.formBuscar.reset();
       })
       .catch();
   }
@@ -197,7 +198,7 @@ class Facturacion {
   }
 
   desminuirStock() {
-    fect("/dismnuirStock", {
+    fect("/facturacion/dismnuirStock", {
       headers: {
         "Content-Type": "application/json",
       },
@@ -220,7 +221,7 @@ class Facturacion {
   }
 
   actualizarNumeroFactura() {
-    fetch("/ultimaFactura")
+    fetch("/facturacion/ultimaFactura")
       .then((numero) => numero.text())
       .then((numero) => {
         document.getElementById("numeroFactura").value = numero;

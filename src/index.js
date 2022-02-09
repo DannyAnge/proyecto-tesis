@@ -20,6 +20,11 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname + "/public")));
 
 app.use(require('./route/index'))
+app.use(require('./route/facturacion'))
+app.use(require('./route/productos'))
+app.use(require('./route/categorias'))
+app.use(require('./route/reportes'))
+app.use(require('./route/marcas'))
 
 
 app.listen(app.get("port"))

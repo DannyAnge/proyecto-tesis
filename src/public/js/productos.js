@@ -1,94 +1,118 @@
-class Productos{
-  constructor(){
+class Productos {
+  constructor() {
     this.id;
     this.codigoBarra;
     this.nombre;
     this.precioCompra;
-    this.monedaCompra;
     this.precioVenta;
-    this.monedaVenta;
-    this.precioMinimo;
-    this.fechaVencimiento;
     this.stock;
     this.categoria;
     this.marca;
     this.descripcion;
     this.utilidad;
-    this.form = document.getElementById("form");
+    this.template = "";
+    this.form = document.getElementById("form-productos");
+    this.getCategorias();
+    this.getMarcas();
+    this.mostrar("");
   }
 
-  getId(){
+  getId() {
     return this.id;
   }
 
-  setId(id){
+  setId(id) {
     this.id = id;
   }
 
-  validar(){
-    console.log("hello");
-    let datos = new FormData(form);
-    this.codigoBarra = datos.get("codBarra")
-    this.nombre = datos.get("nombre")
-    this.precioCompra = datos.get("precioCompra")
-    this.monedaCompra = datos.get('monedaCompra')
-    this.precioVenta = datos.get("precioVenta")
-    this.monedaVenta = datos.get("monedaVenta")
-    this.stock = datos.get("cantidad")
-    this.categoria = datos.get("categoria")
-    this.marca = datos.get("marca")
-    this.descripcion = datos.get("descripcion")
-    this.PrecioMinimo = datos.get("precioMinimo")
-    this.utilidad = datos.get("utilidad")
-    this.FechaVencimiento = datos.get("Vencimiento")
-
-    if(this.nombre === ""){
-      return false
-    }else if(this.stock === ""){
-      return false
-    }else if(this.precioVenta === ""){
-      return false
-    }else{
-      return true
-    }
-  }
-
-  guardar(){
-    if(this.validar()){
-    fetch('guardarProductos', {
+  validacionCodBarra(codigoBarra) {
+    fetch("/productos/codBarra", {
       headers: {
         "Content-Type": "application/json",
       },
       method: "POST",
       body: JSON.stringify({
-        codigoBarra : this.codigoBarra,
-        nombre : this.nombre,
-        precioCompra : this.precioCompra,
-        monedaCompra : this.monedaCompra,
-        precioVenta : this.precioVenta,
-        monedaVenta : this.monedaVenta,
-        precioMinimo : this.precioMinimo,
-        stock : this.stock,
-        categoria : this.categoria,
-        marca : this.marca,
-        descripcion : this.descripcion,
-        utilidad : this.utilidad,
-        fechaVencimiento : this.fechaVencimiento
+        codigoBarra: codigoBarra,
       }),
     })
-      .then((message) => message.text())
-      .then((message) => {
-        alert(message);
-        this.form.reset();
-        this.mostrar();
+      .then((isExiste) => isExiste.json())
+      .then((isExiste) => {
+        if (isExiste.isExiste) {
+          document
+            .getElementById("validacion-codBarra")
+            .classList.remove("hide");
+        } else {
+          document
+            .getElementById("validacion-codBarra")
+            .classList.add("hide");
+        }
       })
-      .catch((err) => console.log(err));
+      .catch();
+  }
+
+  validar() {
+    let datos = new FormData(this.form);
+    this.codigoBarra = datos.get("codBarra");
+    this.nombre = datos.get("nombre");
+    this.precioCompra = datos.get("precioCompra");
+    this.precioVenta = datos.get("precioVenta");
+    this.stock = datos.get("cantidad");
+    this.categoria = datos.get("categoria");
+    this.marca = datos.get("marca");
+    this.descripcion = datos.get("descripcion");
+    this.utilidad = datos.get("utilidad");
+
+    if (this.nombre === "") {
+      return false;
+    } else if (this.stock === "") {
+      return false;
+    } else if (this.precioVenta === "") {
+      return false;
+    } else {
+      return true;
     }
   }
 
-  mostrar() {
+  guardar() {
+    if (this.validar()) {
+      fetch("productos/guardar", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify({
+          codigoBarra: this.codigoBarra,
+          nombre: this.nombre,
+          precioCompra: this.precioCompra,
+          precioVenta: this.precioVenta,
+          stock: this.stock,
+          categoria: this.categoria,
+          marca: this.marca,
+          descripcion: this.descripcion,
+          utilidad: this.utilidad,
+        }),
+      })
+        .then((message) => message.text())
+        .then((message) => {
+          alert(message);
+          this.form.reset();
+          this.mostrar();
+        })
+        .catch((err) => console.log(err));
+    }
+  }
+
+  mostrar(valor) {
     let template = "";
-    fetch("/mostrarProductos")
+    fetch("/productos/getProductos", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify({
+        valor: valor,
+      }),
+    })
       .then((productos) => productos.json())
       .then((productos) => {
         console.log(productos);
@@ -96,25 +120,24 @@ class Productos{
           template += `
                       <tr id='${producto.id}'>
                           <td>
-                              <sapn class="icon-trash" style="color:red;cursor:pointer;margin-left:5px;" btn="eliminarProducto" data-toggle="tooltip" data-original-title="Eliminar"></span>
-                              
-                              <sapn class="fa fa-edit" style="color:blue;" btn="editarProducto" data-toggle="tooltip" data-original-title="Edit"></span>
-                              
+                              <button class="icon-trash btn btn-danger btn-sm" btn="eliminarProducto"></button>
+                              <button class="fa fa-edit btn btn-info btn-sm" btn="editarProducto"></button>
                           </td>
                           <td>${producto.codigoBarra}</td>
                           <td>${producto.nombre}</td>
                           <td>${producto.precioCompra}</td>
                           
                           <td>${producto.precioVenta}</td>
-                          <td>${producto.precioMinimo}</td>
                           
-                          <td>${moment(producto.fechaVencimiento).format(
-                            "YYYY-MM-DD"
-                          )}</td>
+                          
                           <td>${producto.stock}</td>
                           
                           
                           <td>${producto.descripcion}</td>
+
+                          <td>${producto.categoria}</td>
+                          <td>${producto.marca}</td>
+                          <td>${producto.utilidad}</td>
                          
                       </tr>
                   `;
@@ -123,10 +146,9 @@ class Productos{
       })
       .catch((err) => console.log(err));
   }
-  
 
-  editar(){
-    fetch("/editarProducto", {
+  editar() {
+    fetch("/productos/editar", {
       headers: {
         "Content-Type": "application/json",
       },
@@ -140,118 +162,143 @@ class Productos{
         document.getElementById("nombreProducto").value = producto[0].nombre;
         document.getElementById("precioCompraProducto").value =
           producto[0].precioCompra;
-        document.getElementById("monedaCompraProducto").value =
-          producto[0].monedaCompra;
         document.getElementById("precioVentaProducto").value =
           producto[0].precioVenta;
-        document.getElementById("monedaVentaProducto").value =
-          producto[0].monedaVenta;
         document.getElementById("stockProducto").value = producto[0].stock;
-        document.getElementById("marcaProducto").value = producto[0].marca;
-        document.getElementById("categoriaProducto").value =
+        document.getElementById("cmbMarcaProducto").value = producto[0].marca;
+        document.getElementById("cmbCategoriasProducto").value =
           producto[0].categoria;
         document.getElementById("descripcionProducto").value =
           producto[0].descripcion;
-        document.getElementById("PrecioMinimoProducto").value =
-          producto[0].precioMinimo;
-        document.getElementById("utilidadProducto").value = producto[0].utilidad;
-        document.getElementById("FechaVencimientoProducto").value = moment(
-          producto[0].fechaVencimiento
-        ).format("YYYY-MM-DD");
+        document.getElementById("utilidadProducto").value =
+          producto[0].utilidad;
       })
       .catch((error) => {
         console.log(error);
       });
   }
 
-  
-  eliminar(){
-  fetch('/eliminarProducto',{
-      headers : {
-          'Content-Type' : 'application/json'
-      },
-      method : 'POST',
-      body : JSON.stringify({producto:this.id})
-  }).then(message=>message.text())
-  .then(message=>{
-      alert(message)
-      mostrar();
-  })
-  .catch((error=>{
-      console.log(error)
-  }))
-  }
-
-  actualizar(){
-    if(this.validar()){
-    fetch('actualizarProducto', {
+  eliminar() {
+    fetch("/productos/editar", {
       headers: {
         "Content-Type": "application/json",
       },
       method: "POST",
-      body: JSON.stringify({
-        codigoBarra : this.codigoBarra,
-        nombre : this.nombre,
-        precioCompra : this.precioCompra,
-        monedaCompra : this.monedaCompra,
-        precioVenta : this.precioVenta,
-        monedaVenta : this.monedaVenta,
-        precioMinimo : this.precioMinimo,
-        stock : this.stock,
-        categoria : this.categoria,
-        marca : this.marca,
-        descripcion : this.descripcion,
-        utilidad : this.utilidad,
-        fechaVencimiento : this.fechaVencimiento,
-        id : this.id
-      }),
+      body: JSON.stringify({ producto: this.id }),
     })
       .then((message) => message.text())
       .then((message) => {
         alert(message);
-        this.form.reset();
-        this.mostrar();
+        this.mostrar("");
       })
-      .catch((err) => console.log(err));
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  actualizar() {
+    if (this.validar()) {
+      fetch("/productos/actualizar", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify({
+          codigoBarra: this.codigoBarra,
+          nombre: this.nombre,
+          precioCompra: this.precioCompra,
+          precioVenta: this.precioVenta,
+          stock: this.stock,
+          categoria: this.categoria,
+          marca: this.marca,
+          descripcion: this.descripcion,
+          utilidad: this.utilidad,
+          id: this.id,
+        }),
+      })
+        .then((message) => message.text())
+        .then((message) => {
+          alert(message);
+          document.getElementById("guardarProducto").disabled = false;
+          document.getElementById("actualizarProducto").disabled = true;
+          this.form.reset();
+          this.mostrar("");
+        })
+        .catch((err) => console.log(err));
     }
   }
 
+  getCategorias() {
+    fetch("/productos/getCategorias")
+      .then((categorias) => categorias.json())
+      .then((categorias) => {
+        categorias.map((categoria) => {
+          this.template += `
+                              <option value="${categoria.id}">${categoria.nombre}</option>
+          `;
+        });
+        document.getElementById(
+          "cmbCategoriasProducto"
+        ).innerHTML = this.template;
+        this.template = "";
+      })
+      .catch((error) => console.log(erro));
+  }
+
+  getMarcas() {
+    fetch("/productos/getMarcas")
+      .then((marcas) => marcas.json())
+      .then((marcas) => {
+        marcas.map((marca) => {
+          this.template += `
+                              <option value="${marca.id}">${marca.nombre}</option>
+          `;
+        });
+        document.getElementById("cmbMarcaProducto").innerHTML = this.template;
+        this.template = "";
+      })
+      .catch((error) => console.log(error));
+  }
 }
 
 var producto = new Productos();
 
-producto.mostrar();
-
 document.getElementById("table-productos").addEventListener("click", (e) => {
   let idProducto;
   let btn = e.target.getAttribute("btn");
-  if (btn !== null) {
-    if (btn == "editarProducto") {
-      idProducto = e.target.parentElement.parentElement.parentElement.getAttribute("id");
-      if (idProducto != null) {
-        this.setId(idProducto)
-        producto.editar();
-      }
-    }else if(btn=="eliminarProducto"){
-        idProducto = e.target.parentElement.parentElement.getAttribute("id");
-        let confirmar = confirm("esta seguro que quiere eliminar este producto");
-        if(confirmar){
-          this.setId(idProducto)
-          producto.eliminar();
-        }else{
-            
-        }
+  if (btn === "editarProducto") {
+    idProducto = e.target.parentElement.parentElement.getAttribute("id");
+    producto.setId(idProducto);
+    producto.editar();
+    document.getElementById("guardarProducto").disabled = true;
+    document.getElementById("actualizarProducto").disabled = false;
+  } else if (btn === "eliminarProducto") {
+    idProducto = e.target.parentElement.parentElement.getAttribute("id");
+    let confirmar = confirm("esta seguro que quiere eliminar este producto");
+    if (confirmar) {
+      producto.setId(idProducto);
+      producto.eliminar();
+    } else {
     }
   }
 });
 
-document.getElementById("guardarProducto").addEventListener('click',()=>{
-  console.log("hello");
+document.getElementById("guardarProducto").addEventListener("click", () => {
   producto.guardar();
-})
+});
 
-document.getElementById("actualizarProducto").addEventListener("click", (e) =>
-{
+document.getElementById("actualizarProducto").addEventListener("click", (e) => {
   producto.actualizar();
-}
-)
+});
+
+document.getElementById("txtBuscarProducto").addEventListener("keyup", () => {
+  producto.mostrar(document.getElementById("txtBuscarProducto").value);
+});
+
+document.getElementById("CodigoBarraProducto").addEventListener("keyup", () => {
+  producto.validacionCodBarra(
+    document.getElementById("CodigoBarraProducto").value
+  );
+});
+
+exports = producto;
