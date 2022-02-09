@@ -12,11 +12,39 @@ const guardar = async (req, res) => {
   }
 };
 
-const editar = async (req, res) => {};
+const editar = async (req, res) => {
+  try {
+    const { id } = req.body;
+    let marca = await conexion.query("SELECT * FROM marca WHERE id = ?", [id])
+    res.send(marca)
+  } catch (error) {
+    console.log(error)
+  }
+};
 
-const actualizar = async (req, res) => {};
+const actualizar = async (req, res) => {
+  try {
+    const { id, nombre, descripcion } = req.body;
+    let update = await conexion.query("UPDATE marca SET nombre = ?, descripcion = ? WHERE id = ?", [nombre, descripcion, id]);
+    if (update) {
+      res.send("Marca actualizada con exito.")
+    }
+  } catch (error) {
+    console.log(error)
+  }
+};
 
-const eliminar = async (req, res) => {};
+const eliminar = async (req, res) => {
+  try {
+    const { id} = req.body;
+    let eliminar = await conexion.query("DELETE FROM marca WHERE id = ?", [id]);
+    if (eliminar) {
+      res.send("Marca eliminada con exito.")
+    }
+  } catch (error) {
+    console.log(error)
+  }
+};
 
 const getMarcas = async (req, res) => {
   try {

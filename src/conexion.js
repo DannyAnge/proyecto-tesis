@@ -6,7 +6,7 @@ const conexion = mysql.createPool({
     host : "localhost",
     user : "root",
     password : "19199697tsoCD",
-    database : 'tesis'
+    database : 'cdstore'
 });
 
 

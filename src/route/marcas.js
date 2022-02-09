@@ -5,7 +5,7 @@ const {guardar,editar,actualizar,eliminar,getMarcas} = require('../controllers/m
 router.post('/marcas/guardar', guardar)
 router.post('/marcas/editar',editar)
 router.delete('/marcas/eliminar',eliminar)
-router.put('marcas/actualizar',actualizar)
+router.put('/marcas/actualizar',actualizar)
 router.post('/marcas/getMarcas',getMarcas)
 
 module.exports = router;
