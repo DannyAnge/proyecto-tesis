@@ -117,7 +117,7 @@ class Marca {
                 alert(message)
                 this.mostrar('')
             })
-            .catch();
+            .catch(error=>console.log(error));
     }
 
     mostrar(valor) {
