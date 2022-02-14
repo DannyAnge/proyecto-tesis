@@ -207,18 +207,83 @@
   <div class="container-fluid mt--6">
     <div class="row">
       <!-- DATOS GENERALES DE FACTURA -->
-      <div class="col-xl-9">
-        <div class="card bg-white">
-          <div class="card-header bg-transparent">
-            <div class="row align-items-center">
-              <div class="col-12">
-                <h6 class="text-black text-uppercase ls-1 mb-1">
-                  Realizar transaccion
-                </h6>
-              </div>
-            </div>
+      <div class="col-9">
+        <div class="card">
+          <div class="card-header">
+            <h6 class="text-uppercase ls-1">Realizar transaccion.</h6>
           </div>
-          <div class="card-body"></div>
+          <div class="card-body">
+            <form action="" id="form-transacciones">
+              <div class="row">
+                <div class="col-6">
+                  <div class="form-group">
+                    <input
+                      type="date"
+                      name="fecha"
+                      id="fechaTransaccion"
+                      class="form-control form-control-sm"
+                    />
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-group">
+                    <select
+                      name="tipoTransaccion"
+                      id="cmbTransaccion"
+                      class="form-control form-control-sm"
+                    >
+                      <option value="Ingreso">Ingreso</option>
+                      <option value="Egreso">Egreso</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-6">
+                  <div class="form-group">
+                    <input
+                      type="number"
+                      name="monto"
+                      id="jsMontoTransaccion"
+                      class="form-control form-control-sm"
+                      value="0.00"
+                      step="0.01"
+                    />
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-group">
+                    <textarea
+                      name="nota"
+                      id="txtAreaAnotacionesTransaccion"
+                      rows="3"
+                      cols="30"
+                      class="form-control form-control-sm"
+                      placeholder="Nota"
+                    ></textarea>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-4">
+                  <input
+                    type="submit"
+                    value="Guardar"
+                    class="btn btn-primary btn-sm btn-block"
+                    id="btnGuardarTransaccion"
+                  />
+                </div>
+                <div class="col-4">
+                  <input
+                    type="submit"
+                    value="Actualizar"
+                    class="btn btn-info btn-sm btn-block"
+                    id="btnActualizarTransaccion"
+                  />
+                </div>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>
@@ -247,11 +312,10 @@
               <thead>
                 <tr>
                   <th>Acciones</th>
-                  <th>Cod Barra</th>
-                  <th>Cantidad</th>
-                  <th>Nombre</th>
-                  <th>Precio</th>
-                  <th>Importe</th>
+                  <th>Fecha</th>
+                  <th>Movimiento</th>
+                  <th>Monto</th>
+                  <th>Nota</th>
                 </tr>
               </thead>
               <tbody id="table-transacciones"></tbody>

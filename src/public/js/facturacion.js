@@ -244,17 +244,15 @@ document.getElementById("table-facturacion").addEventListener("click", (e) => {
   if (factura.btn != null && factura.btn === "inputProducto") {
     idInput = e.target.getAttribute("id");
     factura.precioVenta = e.target.getAttribute("precio");
-    factura.idproducto = e.target.parentElement.parentElement.getAttribute(
-      "id"
-    );
+    factura.idproducto =
+      e.target.parentElement.parentElement.getAttribute("id");
     factura.actualizarImporte(idInput, factura.precioVenta, factura.idproducto);
   } else if (
     factura.btn != null &&
     factura.btn === "eliminarProductoFacturacion"
   ) {
-    factura.idproducto = e.target.parentElement.parentElement.getAttribute(
-      "id"
-    );
+    factura.idproducto =
+      e.target.parentElement.parentElement.getAttribute("id");
     factura.listaIds.find((id, i) => {
       if (id == factura.idproducto) {
         factura.listaIds.splice(i, 1);
