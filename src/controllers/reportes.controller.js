@@ -45,6 +45,16 @@ const getFactura = async(req,res)=>{
   }
 }
 
+const getDetallesFactura = async (req,res)=>{
+  try {
+    const {factura} = req.body;
+    let detalles = await conexion.query("SELECT d.id,d.cantidadProducto,d.producto,p.nombre,d.precioProducto,d.totalVenta FROM detalleFactura AS d INNER JOIN productos AS p ON(d.producto=p.id) WHERE d.factura = ?",[factura]) 
+    res.send(detalles);
+  } catch (error) {
+   console.log(error); 
+  }
+}
+
 const ventaDiaria = async (fecha) => {
   let venta;
   let getVenta = await conexion.query(
@@ -92,9 +102,29 @@ const existenciaCaja = (ventas,ingresos,egresos)=>{
   return total.toFixed(2);
 }
 
+const devoluciones = async (req,res)=>{
+  try {
+    const { detalle,cantidad,producto } = req.body; 
+    await conexion.query("UPDATE detalleFactura SET cantidadProducto = cantidadProducto - ?, totalVenta = totalVenta - (?*precioProducto) WHERE id = ?",[cantidad,cantidad,detalle])
+    await conexion.query("CALL agregarProductoStock(?,?)",[producto,cantidad]);
+    res.send("Devolucion realizada con exito.");
+  } catch (error) {
+   console.log(error); 
+  }
+}
+
+const getTotalFactura = async (req,res)=>{
+
+}
+
+const getPrecioVentaProducto = async (req,res)=>{
+
+}
 
 module.exports = {
     reporteDiario,
     getFacturas,
-    getFactura
+    getFactura,
+    getDetallesFactura,
+    devoluciones
 }
