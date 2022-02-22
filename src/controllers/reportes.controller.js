@@ -2,7 +2,7 @@ const { render } = require("ejs");
 const conexion = require("../conexion");
 const { route } = require("../route");
 
-var ventas,ingresos,egresos;
+var ventas, ingresos, egresos;
 
 const reporteDiario = async (req, res) => {
   try {
@@ -14,46 +14,50 @@ const reporteDiario = async (req, res) => {
     datos.ventaDiaria = ventas;
     datos.ingresoEfectivo = ingresos;
     datos.egresoEfectivo = egresos;
-    datos.existenciaCaja = existenciaCaja(
-      ventas,
-      ingresos,
-      egresos
-    )
+    datos.existenciaCaja = existenciaCaja(ventas, ingresos, egresos);
     res.send(datos);
   } catch (error) {
     console.log(error);
   }
 };
 
-const getFacturas = async(req,res)=>{
+const getFacturas = async (req, res) => {
   try {
-    const {fecha} = req.body;
-    const facturas = await conexion.query("SELECT * FROM facturas WHERE DATE(fecha) = ?",[fecha]);
+    const { fecha } = req.body;
+    const facturas = await conexion.query(
+      "SELECT * FROM facturas WHERE DATE(fecha) = ? ORDER BY id DESC",
+      [fecha]
+    );
     res.send(facturas);
   } catch (error) {
     console.log(error);
   }
-}
+};
 
-const getFactura = async(req,res)=>{
+const getFactura = async (req, res) => {
   try {
-    const {id} = req.body;
-    let factura = await conexion.query("SELECT * FROM facturas WHERE id=?",[id]);
+    const { id } = req.body;
+    let factura = await conexion.query("SELECT * FROM facturas WHERE id=?", [
+      id,
+    ]);
     res.send(factura);
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-}
+};
 
-const getDetallesFactura = async (req,res)=>{
+const getDetallesFactura = async (req, res) => {
   try {
-    const {factura} = req.body;
-    let detalles = await conexion.query("SELECT d.id,d.cantidadProducto,d.producto,p.nombre,d.precioProducto,d.totalVenta FROM detalleFactura AS d INNER JOIN productos AS p ON(d.producto=p.id) WHERE d.factura = ?",[factura]) 
+    const { factura } = req.body;
+    let detalles = await conexion.query(
+      "SELECT d.id,d.cantidadProducto,d.producto,p.nombre,d.precioProducto,d.totalVenta,d.factura FROM detalleFactura AS d INNER JOIN productos AS p ON(d.producto=p.id) WHERE d.factura = ?",
+      [factura]
+    );
     res.send(detalles);
   } catch (error) {
-   console.log(error); 
+    console.log(error);
   }
-}
+};
 
 const ventaDiaria = async (fecha) => {
   let venta;
@@ -64,7 +68,7 @@ const ventaDiaria = async (fecha) => {
   if (getVenta[0].total !== null) {
     venta = parseFloat(getVenta[0].total).toFixed(2);
   } else {
-    venta = 0.00;
+    venta = 0.0;
   }
   return venta;
 };
@@ -78,7 +82,7 @@ const ingresoEfectivoDiario = async (fecha) => {
   if (getIngresos[0].total !== null) {
     ingreso = parseFloat(getIngresos[0].total).toFixed(2);
   } else {
-    ingreso = 0.00;
+    ingreso = 0.0;
   }
   return ingreso;
 };
@@ -92,39 +96,53 @@ const egresoEfectivoDiario = async (fecha) => {
   if (getEgresos[0].total !== null) {
     egreso = parseFloat(getEgresos[0].total).toFixed(2);
   } else {
-    egreso = 0.00;
+    egreso = 0.0;
   }
   return egreso;
 };
 
-const existenciaCaja = (ventas,ingresos,egresos)=>{
-  let total = (parseFloat(ventas) + parseFloat(ingresos)) - parseFloat(egresos);
+const existenciaCaja = (ventas, ingresos, egresos) => {
+  let total = parseFloat(ventas) + parseFloat(ingresos) - parseFloat(egresos);
   return total.toFixed(2);
-}
+};
 
-const devoluciones = async (req,res)=>{
+const devoluciones = async (req, res) => {
   try {
-    const { detalle,cantidad,producto } = req.body; 
-    await conexion.query("UPDATE detalleFactura SET cantidadProducto = cantidadProducto - ?, totalVenta = totalVenta - (?*precioProducto) WHERE id = ?",[cantidad,cantidad,detalle])
-    await conexion.query("CALL agregarProductoStock(?,?)",[producto,cantidad]);
+    const { detalle, cantidad, producto, precio, factura } = req.body;
+    await conexion.query(
+      "UPDATE detalleFactura SET cantidadProducto = cantidadProducto - ?, totalVenta = totalVenta - (?*precioProducto) WHERE id = ?",
+      [cantidad, cantidad, detalle]
+    );
+    await conexion.query("CALL agregarProductoStock(?,?)", [
+      producto,
+      cantidad,
+    ]);
+    await updateTotalFactura(factura, precio, cantidad);
     res.send("Devolucion realizada con exito.");
   } catch (error) {
-   console.log(error); 
+    console.log(error);
   }
-}
+};
 
-const getTotalFactura = async (req,res)=>{
-
-}
-
-const getPrecioVentaProducto = async (req,res)=>{
-
-}
+const updateTotalFactura = async (factura, precio, cantidad) => {
+  try {
+    let monto = cantidad * precio;
+    console.log(monto);
+    console.log(factura);
+    await conexion.query(
+      "UPDATE facturas SET totalFactura = totalFactura - ? WHERE id = ?",
+      [monto, factura]
+    );
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 module.exports = {
-    reporteDiario,
-    getFacturas,
-    getFactura,
-    getDetallesFactura,
-    devoluciones
-}
+  reporteDiario,
+  getFacturas,
+  getFactura,
+  getDetallesFactura,
+  devoluciones,
+};
+
