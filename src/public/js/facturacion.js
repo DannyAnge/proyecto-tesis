@@ -1,3 +1,32 @@
+(function (API) {
+  API.textCenter = function (txt, options, x, y) {
+    options = options || {};
+    if (options.align == "center") {
+      var fontSize = this.internal.getFontSize();
+
+      // Get page width
+      var pageWidth = this.internal.pageSize.width;
+
+      txtWidth =
+        (this.getStringUnitWidth(txt) * fontSize) / this.internal.scaleFactor;
+
+      // Calculate text's x coordinate
+      x = (pageWidth - txtWidth) / 2;
+    } else if (options.align == "right") {
+      var fontSize = this.internal.getFontSize();
+      var pageWidth = this.internal.pageSize.width;
+      txtWidth =
+        (this.getStringUnitWidth(txt) * fontSize) / this.internal.scaleFactor;
+      x = pageWidth - txtWidth;
+      //dar un margin de de 0.5 ala derecha
+      x = x - 0.5;
+    }
+
+    // Draw text at x,y
+    this.text(txt, x, y);
+  };
+})(jsPDF.API);
+
 class Facturacion {
   constructor() {
     this.id;
@@ -15,6 +44,12 @@ class Facturacion {
     this.listaIds = [];
     this.isExiste;
     this.banderin = true;
+    this.doc = new jsPDF({
+      orientation: 'potrait',
+      unit: 'mm',
+      format: [80,80],
+      putOnlyUsedFonts: true
+    });
     this.actualizarNumeroFactura();
     this.date = moment().format("YYYY-MM-DD");
     /* variable para capturar atributo btn */
@@ -87,9 +122,10 @@ class Facturacion {
       }),
     })
       .then((message) => message.text())
-      .then((message) => {
+      .then(async (message) => {
         alert(message);
-        this.actualizarNumeroFactura();
+        await this.actualizarNumeroFactura();
+        factura.mostrarFacturaPDF();
         this.limpiar();
       })
       .catch();
@@ -157,6 +193,7 @@ class Facturacion {
     if (!this.isExiste) {
       this.listaIds.push(params.id);
       this.listaProductos.push({
+        productoName: params.nombre,
         producto: params.id,
         precioProducto: params.precioVenta,
       });
@@ -227,6 +264,53 @@ class Facturacion {
         document.getElementById("numeroFactura").value = numero;
       })
       .catch((error) => console.log(error));
+  }
+
+
+  generarFacturaPDF() {
+    let encabezado = [
+      `Direcciòn: Jalapa`,
+      `Factura #: 0001`,
+      `Fecha:     ${moment().format('DD/MMM/yyyy')}`,
+      `Cliente :  Cesar Eduardo Diaz`
+    ]
+    let titulos = [
+      "DESCRIPCION      CANT.   PRECIO   IMPORTE"
+    ]
+
+    let items = []
+    this.listaProductos.map(
+      producto => {
+        items.push(
+          producto.productoName 
+          +"  "+producto.cantidadProducto 
+          + "  " + producto.precioProducto 
+          + "  " + producto.totalVenta
+        )
+      }
+    )
+
+    this.doc.setFontSize(15);
+    this.doc.setFontStyle("bold");
+    this.doc.textCenter("FACTURA", { align: "center" }, 0, 6);
+    this.doc.setFontStyle("normal");
+    this.doc.setFontSize(9);
+    this.doc.text(encabezado, 0.5, 11, {})
+    this.doc.setFontStyle("bold")
+    this.doc.setFontSize(9)
+    this.doc.text(titulos, 0.5, 27, {})
+    this.doc.setLineWidth(0.01);
+    this.doc.line(0.5, 29, 80, 29);
+    this.doc.setFontStyle("normal");
+    this.doc.text(items, 0, 32, {align:"center"})
+    let url = this.doc.output("datauristring");
+    document.getElementById("contenedorFacturaPDF").setAttribute("src", url);
+  }
+
+  mostrarFacturaPDF() {
+    this.generarFacturaPDF();
+    this.doc.deletePage(1);
+    this.doc.addPage([80, 80], "mm");
   }
 }
 

@@ -172,6 +172,7 @@ class Reportes {
       })
       .catch((error) => console.log(error));
   }
+
 }
 
 var reportes = new Reportes();

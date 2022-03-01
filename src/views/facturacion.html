@@ -6,12 +6,15 @@
     <%- include('partials/sidenav.html') %>
 
     <!-- Content -->
-    <%- include('partials/_facturacion.html') %> <%-
-    include('partials/_modalProductosFacturacion.html') %>
+    <%- include('partials/_facturacion.html') %> 
+    <%- include('partials/_modalProductosFacturacion.html') %>
+    <%- include('partials/_modalFacturaPDF.html') %>
 
     <!-- footer -->
     <%- include('partials/footer.html') %>
 
+    <script src="js/lib/jspdf.min.js"></script>
     <script src="js/facturacion.js"></script>
+    </script>
   </body>
 </html>

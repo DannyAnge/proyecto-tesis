@@ -12,6 +12,9 @@ class Productos {
     this.utilidad;
     this.template = "";
     this.form = document.getElementById("form-productos");
+    this.btnGuardar = document.getElementById("guardarProducto")
+    this.btnActualizar = document.getElementById("actualizarProducto")
+    this.btnActualizar.disabled = true;
     this.getCategorias();
     this.getMarcas();
     this.mostrar("");
@@ -172,6 +175,8 @@ class Productos {
           producto[0].descripcion;
         document.getElementById("utilidadProducto").value =
           producto[0].utilidad;
+        this.btnActualizar.disabled = false;
+        this.btnGuardar.disabled = true;
       })
       .catch((error) => {
         console.log(error);
@@ -223,6 +228,8 @@ class Productos {
           document.getElementById("actualizarProducto").disabled = true;
           this.form.reset();
           this.mostrar("");
+          this.btnActualizar.disabled = true;
+          this.btnGuardar.disabled = false;
         })
         .catch((err) => console.log(err));
     }
@@ -301,4 +308,3 @@ document.getElementById("CodigoBarraProducto").addEventListener("keyup", () => {
   );
 });
 
-exports = producto;

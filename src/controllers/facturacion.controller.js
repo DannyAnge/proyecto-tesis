@@ -24,8 +24,14 @@ const guardarFactura = async (req, res) => {
     };
     await conexion.query("INSERT INTO facturas set ?", [factura]);
     req.body.detalles.map(async (d) => {
-      await conexion.query("INSERT INTO detalleFactura set ?", d);
-      await conexion.query("CALL venderProductoStock(?,?)",[d.producto,d.cantidadProducto]);
+      await conexion.query("INSERT INTO detalleFactura set ?", { 
+        factura: d.factura,
+        producto : d.producto,
+        precioProducto : d.precioProducto,
+        cantidadProducto : d.cantidadProducto,
+        totalVenta : d.totalVenta
+      });
+      await conexion.query("CALL venderProductoStock(?,?)", [d.producto, d.cantidadProducto]);
     });
     res.send("exito..");
   } catch (error) {
