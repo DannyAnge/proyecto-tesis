@@ -21,13 +21,13 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname + "/public")));
 
 //controladores (manejadores) de rutas
-app.use(require("./route/index"));
-app.use(require("./route/facturacion"));
-app.use(require("./route/productos"));
-app.use(require("./route/categorias"));
-app.use(require("./route/reportes"));
-app.use(require("./route/marcas"));
-app.use(require("./route/transacciones"));
+app.use(require("./routes/index"));
+app.use(require("./routes/facturacion"));
+app.use(require("./routes/productos"));
+app.use(require("./routes/categorias"));
+app.use(require("./routes/reportes"));
+app.use(require("./routes/marcas"));
+app.use(require("./routes/transacciones"));
 
 app.listen(app.get("port"));
 

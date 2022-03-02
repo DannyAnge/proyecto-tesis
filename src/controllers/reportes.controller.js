@@ -1,6 +1,6 @@
 const { render } = require("ejs");
 const conexion = require("../conexion");
-const { route } = require("../route");
+const { route } = require("../routes");
 
 var ventas, ingresos, egresos;
 

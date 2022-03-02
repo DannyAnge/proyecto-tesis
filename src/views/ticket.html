@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <title>Ticket</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="css/ticket.css" rel="stylesheet">
+  </head>
+  <body>
+   <div class="ticket">
+     <p class="centered"> 
+        <h6>CDSOFT</h6>
+        <br><strong>Teléfono :</strong> +504 8776-0151 
+        <br><strong>Dirección: </strong> La fraternidad 
+				<br><strong>Fecha: </strong> 
+				<br><strong>Ticket Nº: </strong> # 00001 
+			</p>
+      <p>
+				<strong>Cliente :</strong>  
+				<br><strong>Dirección: </strong> 
+			</p>
+      <table>
+        <thead>
+           <tr >
+              <th class="quantity both_border">Cant.</th>
+              <th class="description both_border">Descripción</th>
+              <th class="price both_border">Total</th>
+           </tr>
+        </thead>
+        <tbody>      
+          <% detalles.forEach(dato=>{ %> 
+          <tr>
+            <td class="quantity"><%= dato.cantidadProducto %> </td>
+            <td class="description"><%= dato.nombre  %> </td>
+            <td class="price"><%= dato.totalVenta %> </td>
+          </tr>
+            <% }) %> 
+          <tr>
+            <th class="price totales both_border" colspan=3>
+               TOTAL IMPORTE C$ 1,200.00
+            </th>
+          </tr>
+        </tbody>
+      </table>
+      <p class="centered">
+       Gracias por su compra!
+       <br>CDSOFT
+      </p>
+      <br>
+      <button id="impimirTicket">Imprimir</button>
+   </div> 
+   <script src="js/ticket.js"></script>
+  </body>
+</html>

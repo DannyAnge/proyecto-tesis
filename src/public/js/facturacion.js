@@ -1,32 +1,3 @@
-(function (API) {
-  API.textCenter = function (txt, options, x, y) {
-    options = options || {};
-    if (options.align == "center") {
-      var fontSize = this.internal.getFontSize();
-
-      // Get page width
-      var pageWidth = this.internal.pageSize.width;
-
-      txtWidth =
-        (this.getStringUnitWidth(txt) * fontSize) / this.internal.scaleFactor;
-
-      // Calculate text's x coordinate
-      x = (pageWidth - txtWidth) / 2;
-    } else if (options.align == "right") {
-      var fontSize = this.internal.getFontSize();
-      var pageWidth = this.internal.pageSize.width;
-      txtWidth =
-        (this.getStringUnitWidth(txt) * fontSize) / this.internal.scaleFactor;
-      x = pageWidth - txtWidth;
-      //dar un margin de de 0.5 ala derecha
-      x = x - 0.5;
-    }
-
-    // Draw text at x,y
-    this.text(txt, x, y);
-  };
-})(jsPDF.API);
-
 class Facturacion {
   constructor() {
     this.id;
@@ -44,12 +15,6 @@ class Facturacion {
     this.listaIds = [];
     this.isExiste;
     this.banderin = true;
-    this.doc = new jsPDF({
-      orientation: 'potrait',
-      unit: 'mm',
-      format: [80,80],
-      putOnlyUsedFonts: true
-    });
     this.actualizarNumeroFactura();
     this.date = moment().format("YYYY-MM-DD");
     /* variable para capturar atributo btn */
@@ -267,51 +232,15 @@ class Facturacion {
   }
 
 
-  generarFacturaPDF() {
-    let encabezado = [
-      `Direcciòn: Jalapa`,
-      `Factura #: 0001`,
-      `Fecha:     ${moment().format('DD/MMM/yyyy')}`,
-      `Cliente :  Cesar Eduardo Diaz`
-    ]
-    let titulos = [
-      "DESCRIPCION      CANT.   PRECIO   IMPORTE"
-    ]
-
-    let items = []
-    this.listaProductos.map(
-      producto => {
-        items.push(
-          producto.productoName 
-          +"  "+producto.cantidadProducto 
-          + "  " + producto.precioProducto 
-          + "  " + producto.totalVenta
-        )
-      }
-    )
-
-    this.doc.setFontSize(15);
-    this.doc.setFontStyle("bold");
-    this.doc.textCenter("FACTURA", { align: "center" }, 0, 6);
-    this.doc.setFontStyle("normal");
-    this.doc.setFontSize(9);
-    this.doc.text(encabezado, 0.5, 11, {})
-    this.doc.setFontStyle("bold")
-    this.doc.setFontSize(9)
-    this.doc.text(titulos, 0.5, 27, {})
-    this.doc.setLineWidth(0.01);
-    this.doc.line(0.5, 29, 80, 29);
-    this.doc.setFontStyle("normal");
-    this.doc.text(items, 0, 32, {align:"center"})
-    let url = this.doc.output("datauristring");
-    document.getElementById("contenedorFacturaPDF").setAttribute("src", url);
+  setDatosImprimir() {
+    fetch('/ticket')
+    .then(e=>{})
+    .then(e=>{})
+    .catch(error =>{
+      console.log(error)
+    }) 
   }
-
-  mostrarFacturaPDF() {
-    this.generarFacturaPDF();
-    this.doc.deletePage(1);
-    this.doc.addPage([80, 80], "mm");
-  }
+ 
 }
 
 /*--------------------------------------------------------------------------------------*/
@@ -357,8 +286,9 @@ document.getElementById("table-facturacion").addEventListener("click", (e) => {
 });
 
 document.getElementById("btnGuardarFactura").addEventListener("click", () => {
-  factura.setDatosFacturacion();
-  factura.guardarFactura();
+  //factura.setDatosFacturacion();
+  //factura.guardarFactura();
+  //factura.setDatosImprimir();
 });
 
 document.getElementById("buscarPorNombre").addEventListener("keyup", () => {
