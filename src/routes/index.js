@@ -28,8 +28,8 @@ router.get('/transacciones', (req, res) => {
   res.render('transacciones.html')
 })
 
-router.get('/ajustes', (req, res) => {
-  res.render('ajustes.html')
+router.get('/perfil', (req, res) => {
+  res.render('perfil.html')
 })
 
 module.exports = router;

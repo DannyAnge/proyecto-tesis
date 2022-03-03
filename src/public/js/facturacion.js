@@ -92,6 +92,7 @@ class Facturacion {
         await this.actualizarNumeroFactura();
         this.limpiar();
         this.ticket();
+        document.getElementById('fechaFactura').value = this.date;
       })
       .catch();
   }
@@ -231,7 +232,7 @@ class Facturacion {
       .catch((error) => console.log(error));
   }
 
-  ticket(){
+  ticket() {
     window.open('http://localhost:3000/facturacion/ticket')
   }
 }
@@ -278,7 +279,7 @@ document.getElementById("table-facturacion").addEventListener("click", (e) => {
   }
 });
 
-document.getElementById("btnGuardarFactura").addEventListener("click",() => {
+document.getElementById("btnGuardarFactura").addEventListener("click", () => {
   factura.setDatosFacturacion();
   factura.guardarFactura();
 });

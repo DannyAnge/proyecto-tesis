@@ -7,7 +7,7 @@ const app = express();
 
 app.set("port", process.env.PORT || 3000);
 //decirle al server donde estaran las vistas
-app.set("views", path.join(__dirname + "/views")); 
+app.set("views", path.join(__dirname + "/views"));
 //dcirle al server que extencion usaran las vistas
 app.engine("html", require("ejs").renderFile);
 //decirle al server que motor de plantilla usara
@@ -28,6 +28,7 @@ app.use(require("./routes/categorias"));
 app.use(require("./routes/reportes"));
 app.use(require("./routes/marcas"));
 app.use(require("./routes/transacciones"));
+app.use(require('./routes/perfil'))
 
 app.listen(app.get("port"));
 

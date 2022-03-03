@@ -82,7 +82,18 @@ const desminuirStock = async (req, res) => {
 };
 
 const ticket = async (req, res) => {
-  res.render("ticket.html", { detalles: detalles, comprador: comprador, fecha: fecha, factura: numeroFactura });
+  try {
+    let perfil = await conexion.query("SELECT * FROM perfil");
+    res.render("ticket.html", {
+      detalles: detalles,
+      comprador: comprador,
+      fecha: fecha,
+      factura: numeroFactura,
+      perfil: perfil
+    });
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 module.exports = {

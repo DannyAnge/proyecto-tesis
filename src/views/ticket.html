@@ -78,9 +78,9 @@
     </style>
    <div class="ticket">
      <p class="centered"> 
-        <h6 style="text-align: center;">DREAM ANGEL SHOP</h6>
-        <br><strong>Teléfono :</strong> 8437-7563 
-        <br><strong>Dirección: </strong> Del hotel JONATHAN dos cuadras al norte 
+        <h6 style="text-align: center;"><%= perfil[0].nombre %></h6>
+        <br><strong>Teléfono :</strong> <%= perfil[0].telefono %> 
+        <br><strong>Dirección: </strong> <%= perfil[0].direccion %>  
 				<br><strong>Fecha: </strong><%= fecha %> 
 				<br><strong>Ticket Nº: </strong> <%= factura %>  
 			</p>
@@ -113,7 +113,7 @@
         </tbody>
       </table>
       <p class="centered">
-       Gracias por su compra!
+        <%= perfil[0].mensaje %> 
        <br>
       </p>
       <br>
