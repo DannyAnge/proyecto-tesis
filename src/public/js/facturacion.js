@@ -88,10 +88,10 @@ class Facturacion {
     })
       .then((message) => message.text())
       .then(async (message) => {
-        alert(message);
+        await alert(message);
         await this.actualizarNumeroFactura();
-        factura.mostrarFacturaPDF();
         this.limpiar();
+        this.ticket();
       })
       .catch();
   }
@@ -231,16 +231,9 @@ class Facturacion {
       .catch((error) => console.log(error));
   }
 
-
-  setDatosImprimir() {
-    fetch('/ticket')
-    .then(e=>{})
-    .then(e=>{})
-    .catch(error =>{
-      console.log(error)
-    }) 
+  ticket(){
+    window.open('http://localhost:3000/facturacion/ticket')
   }
- 
 }
 
 /*--------------------------------------------------------------------------------------*/
@@ -285,10 +278,9 @@ document.getElementById("table-facturacion").addEventListener("click", (e) => {
   }
 });
 
-document.getElementById("btnGuardarFactura").addEventListener("click", () => {
-  //factura.setDatosFacturacion();
-  //factura.guardarFactura();
-  //factura.setDatosImprimir();
+document.getElementById("btnGuardarFactura").addEventListener("click",() => {
+  factura.setDatosFacturacion();
+  factura.guardarFactura();
 });
 
 document.getElementById("buscarPorNombre").addEventListener("keyup", () => {

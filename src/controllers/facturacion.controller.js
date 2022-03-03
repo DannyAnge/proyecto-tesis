@@ -1,6 +1,8 @@
 const { render } = require("ejs");
 const conexion = require("../conexion");
 
+var detalles, comprador, fecha, numeroFactura;
+
 const ultimaFactura = async (req, res) => {
   try {
     let proxima;
@@ -16,6 +18,10 @@ const ultimaFactura = async (req, res) => {
 
 const guardarFactura = async (req, res) => {
   try {
+    detalles = req.body.detalles;
+    comprador = req.body.comprador;
+    fecha = req.body.fecha;
+    numeroFactura = req.body.detalles[0].factura;
     let factura = {
       nombre_comprador: req.body.comprador,
       fecha: req.body.fecha,
@@ -75,10 +81,15 @@ const desminuirStock = async (req, res) => {
   }
 };
 
+const ticket = async (req, res) => {
+  res.render("ticket.html", { detalles: detalles, comprador: comprador, fecha: fecha, factura: numeroFactura });
+}
+
 module.exports = {
   ultimaFactura,
   guardarFactura,
   buscarPorNombre,
   getProducto,
   desminuirStock,
+  ticket
 };

@@ -32,12 +32,4 @@ router.get('/ajustes', (req, res) => {
   res.render('ajustes.html')
 })
 
-router.get('/ticket', async(req, res) => {
-  try {
-     let detalles = await conexion.query("SELECT d.cantidadProducto,p.nombre,d.totalVenta FROM detalleFactura AS d INNER JOIN productos AS p ON(d.producto=p.id) WHERE d.factura = (SELECT MAX(id) FROM facturas)"); 
-    res.render('ticket.html',{detalles:detalles});
-  } catch (error) {
-   console.log(error) 
-  }
-})
 module.exports = router;

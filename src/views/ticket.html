@@ -7,17 +7,85 @@
     <link href="css/ticket.css" rel="stylesheet">
   </head>
   <body>
+    <style>
+      * {
+          font-size: 12px;
+          font-family: 'Times New Roman';
+        }
+        .hide{
+            display: none;
+        }
+
+        .show{
+            display: block;
+        }
+
+        .both_border {
+            border-top: 1px dotted  black;
+            border-bottom: 1px dotted  black;
+          
+        }
+
+        td.description,
+        th.description {
+            width: 30mm;
+            max-width: 30mm;
+        }
+
+        td.quantity,
+        th.quantity {
+            width: 10mm;
+            max-width: 10mm;
+            word-break: break-all;
+          text-align:center;
+        }
+
+        td.price,
+        th.price {
+            width: 20mm;
+            max-width: 20mmpx;
+            word-break: break-all;
+          text-align:right;
+        }
+
+        .centered {
+            text-align: center;
+            align-content: center;
+        }
+
+        .ticket {
+            width: 60mm;
+            max-width: 60mm;
+        }
+
+        td.totales {
+            font-size: 15px;
+        }
+
+
+        img {
+            max-width: inherit;
+            width: inherit;
+        }
+
+        @media print {
+            .hidden-print,
+            .hidden-print * {
+                display: none !important;
+            }
+        }
+
+    </style>
    <div class="ticket">
      <p class="centered"> 
-        <h6>CDSOFT</h6>
-        <br><strong>Teléfono :</strong> +504 8776-0151 
-        <br><strong>Dirección: </strong> La fraternidad 
-				<br><strong>Fecha: </strong> 
-				<br><strong>Ticket Nº: </strong> # 00001 
+        <h6 style="text-align: center;">DREAM ANGEL SHOP</h6>
+        <br><strong>Teléfono :</strong> 8437-7563 
+        <br><strong>Dirección: </strong> Del hotel JONATHAN dos cuadras al norte 
+				<br><strong>Fecha: </strong><%= fecha %> 
+				<br><strong>Ticket Nº: </strong> <%= factura %>  
 			</p>
       <p>
-				<strong>Cliente :</strong>  
-				<br><strong>Dirección: </strong> 
+				<strong>Cliente :</strong> <%= comprador  %>  
 			</p>
       <table>
         <thead>
@@ -28,27 +96,38 @@
            </tr>
         </thead>
         <tbody>      
+          <% var total = 0.0; %> 
           <% detalles.forEach(dato=>{ %> 
           <tr>
             <td class="quantity"><%= dato.cantidadProducto %> </td>
-            <td class="description"><%= dato.nombre  %> </td>
-            <td class="price"><%= dato.totalVenta %> </td>
+            <td class="description"><%= dato.productoName  %> </td>
+            <td class="price"><%= parseFloat(dato.totalVenta).toFixed(2) %> </td>
+            <% total += parseFloat(dato.totalVenta) %> 
           </tr>
             <% }) %> 
           <tr>
             <th class="price totales both_border" colspan=3>
-               TOTAL IMPORTE C$ 1,200.00
+               TOTAL IMPORTE C$ <%- total.toFixed(2) %>  
             </th>
           </tr>
         </tbody>
       </table>
       <p class="centered">
        Gracias por su compra!
-       <br>CDSOFT
+       <br>
       </p>
       <br>
       <button id="impimirTicket">Imprimir</button>
+      <button id="cerrarTicket" onclick="window.close()">Cerrar</button>
    </div> 
-   <script src="js/ticket.js"></script>
+   <script>
+    document.getElementById('impimirTicket').addEventListener('click',()=>{
+      document.getElementById('impimirTicket').classList.toggle('hide');
+      document.getElementById('cerrarTicket').classList.toggle('hide');
+      window.print();
+      document.getElementById('impimirTicket').classList.toggle('show');
+      document.getElementById('cerrarTicket').classList.toggle('show');
+    })          
+   </script>
   </body>
 </html>
