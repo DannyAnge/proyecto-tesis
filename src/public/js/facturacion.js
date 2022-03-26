@@ -73,7 +73,6 @@ class Facturacion {
   }
 
   guardarFactura() {
-    console.log(this.listaProductos)
     fetch("/facturacion/guardar", {
       headers: {
         "Content-Type": "application/json",
@@ -99,6 +98,9 @@ class Facturacion {
   }
 
   limpiar() {
+    this.listaProductos.map(producto => {
+      this.agregarInventario(producto.producto, document.getElementById(`cantidadProducto${producto.producto}`).innerText);
+    })
     this.total = 0;
     this.listaIds = [];
     this.listaProductos = [];

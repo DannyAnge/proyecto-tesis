@@ -40,9 +40,8 @@ const guardarFactura = async (req, res) => {
         cantidadProducto: d.cantidadProducto,
         totalVenta: d.totalVenta
       });
-      const message = await conexion.query("CALL venderId(?,?)", [d.producto, d.cantidadProducto]);
     });
-    res.send(message);
+    res.send('');
   } catch (error) {
     console.log(error);
   }

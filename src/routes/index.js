@@ -6,7 +6,7 @@ const conexion = require("../conexion");
 
 router.get("/", (req, res) => {
   try {
-    res.render("facturacion.html");
+    res.render("spa.html");
   } catch (error) {
     console.log(error);
   }

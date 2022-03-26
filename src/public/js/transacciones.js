@@ -14,16 +14,6 @@ class Transacciones {
     this.fechaNow = moment().format("yyyy-MM-DD");
     document.getElementById("fechaTransaccion").value = this.fechaNow;
     this.mostrar("");
-    this.estiloOpcionMenu();
-  }
-
-  estiloOpcionMenu() {
-    document
-      .querySelector(".nav-item-transacciones")
-      .classList.toggle("bg-primary");
-    document
-      .querySelector(".nav-link-transacciones")
-      .classList.toggle("text-white");
   }
 
   setId(id) {
