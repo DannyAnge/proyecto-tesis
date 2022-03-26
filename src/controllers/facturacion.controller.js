@@ -9,7 +9,11 @@ const ultimaFactura = async (req, res) => {
     const numeroFactura = await conexion.query(
       "SELECT MAX(id) AS numeroFactura FROM facturas"
     );
-    proxima = parseInt(numeroFactura[0].numeroFactura) + 1;
+    if (numeroFactura[0].numeroFactura == null) {
+      proxima = 1;
+    } else {
+      proxima = parseInt(numeroFactura[0].numeroFactura) + 1;
+    }
     res.send(proxima.toString());
   } catch (error) {
     console.log(error);
@@ -25,7 +29,6 @@ const guardarFactura = async (req, res) => {
     let factura = {
       nombre_comprador: req.body.comprador,
       fecha: req.body.fecha,
-      tipoVenta: req.body.formaPago,
       totalFactura: req.body.total,
     };
     await conexion.query("INSERT INTO facturas set ?", [factura]);
@@ -37,9 +40,9 @@ const guardarFactura = async (req, res) => {
         cantidadProducto: d.cantidadProducto,
         totalVenta: d.totalVenta
       });
-      await conexion.query("CALL venderProductoStock(?,?)", [d.producto, d.cantidadProducto]);
+      const message = await conexion.query("CALL venderId(?,?)", [d.producto, d.cantidadProducto]);
     });
-    res.send("exito..");
+    res.send(message);
   } catch (error) {
     console.log(error);
   }
@@ -60,26 +63,51 @@ const buscarPorNombre = async (req, res) => {
 
 const getProducto = async (req, res) => {
   try {
-    const { codigoBarra } = req.body;
-    const producto = await conexion.query(
-      "SELECT * FROM productos WHERE codigoBarra = ?",
-      [codigoBarra]
-    );
-    res.send(producto);
+    const { codigoBarra, cantidad } = req.body;
+    const message = await venderCodigoBarra(codigoBarra, cantidad);
+    if (message[0][0].message === "exito") {
+      const producto = await conexion.query(
+        "SELECT * FROM productos WHERE codigoBarra = ?",
+        [codigoBarra]
+      );
+      res.send(producto);
+    } else {
+      res.send({ message: message[0][0].message })
+    }
   } catch (error) {
     console.log(error);
   }
 };
 
-const desminuirStock = async (req, res) => {
+const venderCodigoBarra = async (producto, cantidad) => {
+  let message;
   try {
-    const { id, cantidad } = req.body;
-    await conexion.query("call venderProductoStock(?,?)", [id, cantidad]);
-    res.send("");
+    message = await conexion.query("call venderCodigoBarra(?,?)", [producto, cantidad]);
+  } catch (error) {
+    console.log(error);
+  }
+  return message;
+};
+
+const venderId = async (req, res) => {
+  try {
+    const { producto, cantidad } = req.body;
+    const message = await conexion.query("call venderId(?,?)", [producto, cantidad]);
+    res.send(message);
   } catch (error) {
     console.log(error);
   }
 };
+
+const agregarProductoInventario = async (req, res) => {
+  try {
+    const { producto, cantidad } = req.body;
+    await conexion.query("CALL agregarInventario(?,?)", [producto, cantidad])
+    res.send('');
+  } catch (error) {
+    console.log(error)
+  }
+}
 
 const ticket = async (req, res) => {
   try {
@@ -101,6 +129,7 @@ module.exports = {
   guardarFactura,
   buscarPorNombre,
   getProducto,
-  desminuirStock,
-  ticket
+  ticket,
+  venderId,
+  agregarProductoInventario
 };

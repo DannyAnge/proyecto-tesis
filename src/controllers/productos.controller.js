@@ -12,7 +12,6 @@ const guardar = async (req, res) => {
       categoria,
       marca,
       descripcion,
-      utilidad,
     } = req.body;
     let newUser = {
       codigoBarra: codigoBarra,
@@ -23,7 +22,6 @@ const guardar = async (req, res) => {
       categoria: categoria,
       marca: marca,
       descripcion: descripcion,
-      utilidad: utilidad,
     };
     await conexion.query("INSERT INTO productos set ?", [newUser]);
     res.send("Productos guardados con exito");
@@ -43,12 +41,11 @@ const actualizar = async (req, res) => {
       categoria,
       marca,
       descripcion,
-      utilidad,
       id,
     } = req.body;
 
     await conexion.query(
-      `UPDATE productos SET codigoBarra = ?, nombre = ?, precioCompra = ?, precioVenta = ?, stock = ?, categoria = ?, marca = ?, descripcion = ?,utilidad = ? WHERE id = ?`,
+      `UPDATE productos SET codigoBarra = ?, nombre = ?, precioCompra = ?, precioVenta = ?, stock = ?, categoria = ?, marca = ?, descripcion = ? WHERE id = ?`,
       [
         codigoBarra,
         nombre,
@@ -58,7 +55,6 @@ const actualizar = async (req, res) => {
         categoria,
         marca,
         descripcion,
-        utilidad,
         id,
       ]
     );
@@ -85,7 +81,7 @@ const getProductos = async (req, res) => {
   try {
     const { valor } = req.body;
     const productos = await conexion.query(
-      "SELECT p.id,codigoBarra,p.nombre,precioCompra,precioVenta,stock,c.nombre AS categoria ,m.nombre AS marca,p.descripcion,utilidad FROM productos AS p INNER JOIN categorias AS c ON(p.categoria=c.id) INNER JOIN marca AS m ON(p.marca=m.id) WHERE CONCAT(p.nombre,p.codigoBarra,m.nombre,c.nombre) LIKE ? ORDER BY id DESC LIMIT 20",
+      "SELECT p.id,codigoBarra,p.nombre,precioCompra,precioVenta,stock,c.nombre AS categoria ,m.nombre AS marca,p.descripcion FROM productos AS p INNER JOIN categorias AS c ON(p.categoria=c.id) INNER JOIN marca AS m ON(p.marca=m.id) WHERE CONCAT(p.nombre,p.codigoBarra,m.nombre,c.nombre) LIKE ? ORDER BY id DESC LIMIT 20",
       ["%" + valor + "%"]
     );
     res.send(productos);
@@ -108,7 +104,7 @@ const getCategorias = async (req, res) => {
   try {
     let categorias = await conexion.query("SELECT * FROM categorias");
     res.send(categorias);
-  } catch (error) {}
+  } catch (error) { }
 };
 
 const getMarcas = async (req, res) => {

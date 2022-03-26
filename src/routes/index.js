@@ -6,14 +6,14 @@ const conexion = require("../conexion");
 
 router.get("/", (req, res) => {
   try {
-    res.render("inventario.html");
+    res.render("facturacion.html");
   } catch (error) {
     console.log(error);
   }
 });
 
-router.get('/facturacion', (req, res) => {
-  res.render("facturacion.html")
+router.get('/inventario', (req, res) => {
+  res.render("inventario.html")
 })
 
 router.get('/reportes', (req, res) => {

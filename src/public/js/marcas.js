@@ -183,3 +183,5 @@ document.getElementById("table-marcas").addEventListener('click', (e) => {
         marca.eliminar();
     }
 })
+
+

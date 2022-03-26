@@ -63,7 +63,6 @@ class Productos {
     this.categoria = datos.get("categoria");
     this.marca = datos.get("marca");
     this.descripcion = datos.get("descripcion");
-    this.utilidad = datos.get("utilidad");
 
     if (this.nombre === "") {
       return false;
@@ -92,7 +91,6 @@ class Productos {
           categoria: this.categoria,
           marca: this.marca,
           descripcion: this.descripcion,
-          utilidad: this.utilidad,
         }),
       })
         .then((message) => message.text())
@@ -129,19 +127,11 @@ class Productos {
                           <td>${producto.codigoBarra}</td>
                           <td>${producto.nombre}</td>
                           <td>${producto.precioCompra}</td>
-                          
                           <td>${producto.precioVenta}</td>
-                          
-                          
                           <td>${producto.stock}</td>
-                          
-                          
                           <td>${producto.descripcion}</td>
-
                           <td>${producto.categoria}</td>
                           <td>${producto.marca}</td>
-                          <td>${producto.utilidad}</td>
-                         
                       </tr>
                   `;
         });
@@ -173,8 +163,6 @@ class Productos {
           producto[0].categoria;
         document.getElementById("descripcionProducto").value =
           producto[0].descripcion;
-        document.getElementById("utilidadProducto").value =
-          producto[0].utilidad;
         this.btnActualizar.disabled = false;
         this.btnGuardar.disabled = true;
       })
@@ -184,7 +172,7 @@ class Productos {
   }
 
   eliminar() {
-    fetch("/productos/editar", {
+    fetch("/productos/eliminar", {
       headers: {
         "Content-Type": "application/json",
       },
@@ -217,7 +205,6 @@ class Productos {
           categoria: this.categoria,
           marca: this.marca,
           descripcion: this.descripcion,
-          utilidad: this.utilidad,
           id: this.id,
         }),
       })
