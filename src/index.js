@@ -5,7 +5,7 @@ const path = require("path");
 //INICIALIZAMOS EXPRESS
 const app = express();
 
-app.set("port", process.env.PORT || 3000);
+app.set("port", process.env.PORT || 5000);
 //decirle al server donde estaran las vistas
 app.set("views", path.join(__dirname + "/views"));
 //dcirle al server que extencion usaran las vistas

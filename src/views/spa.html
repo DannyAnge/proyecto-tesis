@@ -32,11 +32,12 @@
     include('partials/_modalDetalles.html') %> <%-
     include('partials/_modalCategorias.html') %> <%-
     include('partials/_modalMarcas.html') %>
+    <%- include('partials/modalAgregarProducto.html')  %> 
 
     <!-- footer -->
-    <script src="js/spa.js"></script>
     <%- include('partials/footer.html') %>
-    <script src="js/facturacion.js"></script>
+    <script src="js/spa.js"></script>
+    <script src="js/facturacion.js" type="module"></script>
     <script src="js/productos.js"></script>
     <script src="js/categorias.js"></script>
     <script src="js/marcas.js"></script>

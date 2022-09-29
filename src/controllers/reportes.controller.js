@@ -113,7 +113,7 @@ const devoluciones = async (req, res) => {
       "UPDATE detalleFactura SET cantidadProducto = cantidadProducto - ?, totalVenta = totalVenta - (?*precioProducto) WHERE id = ?",
       [cantidad, cantidad, detalle]
     );
-    await conexion.query("CALL agregarProductoStock(?,?)", [
+    await conexion.query("CALL AgregarInventario(?,?)", [
       producto,
       cantidad,
     ]);
