@@ -195,3 +195,4 @@ document.getElementById("table-categorias").addEventListener("click", (e) => {
 document.getElementById("txtBuscarCategoria").addEventListener("keyup", () => {
   categoria.mostrar(document.getElementById("txtBuscarCategoria").value);
 });
+
