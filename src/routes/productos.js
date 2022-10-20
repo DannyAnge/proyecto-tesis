@@ -10,22 +10,24 @@ const {
     getCategorias,
     getMarcas,
     isExisteCodBarra
-} = require('../controllers/productos.controller')
+} = require('../models/productos.model')
 
-router.post("/productos/guardar", guardar);
+const {isLoggedIn} = require('../lib/auth')
 
-router.post("/productos/actualizar", actualizar);
+router.post("/productos/guardar",isLoggedIn,  guardar);
 
-router.post("/productos/editar", editar);
+router.post("/productos/actualizar",isLoggedIn,  actualizar);
 
-router.post("/productos/getProductos", getProductos);
+router.post("/productos/editar",isLoggedIn,  editar);
 
-router.post("/productos/eliminar", eliminar);
+router.post("/productos/getProductos",isLoggedIn,  getProductos);
 
-router.get('/productos/getCategorias', getCategorias)
+router.post("/productos/eliminar",isLoggedIn,  eliminar);
 
-router.get('/productos/getMarcas', getMarcas)
+router.get('/productos/getCategorias',isLoggedIn,  getCategorias)
 
-router.post('/productos/codBarra', isExisteCodBarra)
+router.get('/productos/getMarcas',isLoggedIn,  getMarcas)
+
+router.post('/productos/codBarra',isLoggedIn,  isExisteCodBarra)
 
 module.exports = router;

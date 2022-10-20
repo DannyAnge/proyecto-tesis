@@ -7,16 +7,18 @@ const {
   getCategorias,
   actualizar,
   eliminar
-} = require("../controllers/categorias.controller");
+} = require("../models/categorias.model");
 
-router.post("/categorias/guardar", guardar);
+const {isLoggedIn} = require('../lib/auth')
 
-router.post("/categorias/getCategorias", getCategorias);
+router.post("/categorias/guardar",isLoggedIn,  guardar);
 
-router.post("/categorias/editar", editar);
+router.post("/categorias/getCategorias",isLoggedIn,  getCategorias);
 
-router.post('/categorias/actualizar',actualizar)
+router.post("/categorias/editar",isLoggedIn,  editar);
 
-router.put('/categorias/eliminar',eliminar)
+router.post('/categorias/actualizar',isLoggedIn, actualizar)
+
+router.put('/categorias/eliminar',isLoggedIn, eliminar)
 
 module.exports = router;

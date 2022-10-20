@@ -1,16 +1,17 @@
 const express = require("express");
 const router = express.Router();
 
-const { reporteDiario,getFacturas,getFactura,getDetallesFactura,devoluciones } = require("../controllers/reportes.controller");
+const { reporteDiario,getFacturas,getFactura,getDetallesFactura,devoluciones } = require("../models/reportes.model");
+const {isLoggedIn} = require("../lib/auth")
 
-router.post("/reportes/ventaDiaria",reporteDiario);
+router.post("/reportes/ventaDiaria",isLoggedIn, reporteDiario);
 
-router.post('/reportes/getFacturas',getFacturas)
+router.post('/reportes/getFacturas',isLoggedIn, getFacturas)
 
-router.post('/reportes/getFactura',getFactura)
+router.post('/reportes/getFactura',isLoggedIn, getFactura)
 
-router.post('/reportes/getDetallesFactura',getDetallesFactura)
+router.post('/reportes/getDetallesFactura',isLoggedIn, getDetallesFactura)
 
-router.post('/reportes/devoluciones',devoluciones)
+router.post('/reportes/devoluciones',isLoggedIn, devoluciones)
 
 module.exports = router;

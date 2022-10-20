@@ -1,11 +1,12 @@
 const express = require('express')
 const router = express.Router();
-const {guardar,editar,actualizar,eliminar,getMarcas} = require('../controllers/marcas.controller')
+const {guardar,editar,actualizar,eliminar,getMarcas} = require('../models/marcas.model')
+const {isLoggedIn} = require('../lib/auth')
 
-router.post('/marcas/guardar', guardar)
-router.post('/marcas/editar',editar)
-router.delete('/marcas/eliminar',eliminar)
-router.put('/marcas/actualizar',actualizar)
-router.post('/marcas/getMarcas',getMarcas)
+router.post('/marcas/guardar',isLoggedIn, guardar)
+router.post('/marcas/editar',isLoggedIn, editar)
+router.delete('/marcas/eliminar',isLoggedIn, eliminar)
+router.put('/marcas/actualizar',isLoggedIn, actualizar)
+router.post('/marcas/getMarcas', isLoggedIn,getMarcas)
 
 module.exports = router;

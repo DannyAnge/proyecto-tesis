@@ -142,14 +142,14 @@
                 </span>
                 <div class="media-body ml-2 d-none d-lg-block">
                   <span class="mb-0 text-sm font-weight-bold"
-                    >Usuario Online</span
+                    ><%= user.nombreUsuario %> </span
                   >
                 </div>
               </div>
             </a>
             <div class="dropdown-menu dropdown-menu-right">
               <div class="dropdown-divider"></div>
-              <a href="#!" class="dropdown-item">
+              <a href="/logout" class="dropdown-item">
                 <i class="ni ni-user-run"></i>
                 <span>Logout</span>
               </a>
@@ -184,40 +184,50 @@
             <div class="row align-items-center">
               <div class="col">
                 <h6 class="text-black text-uppercase ls-1 mb-1">
-                  Datos Generales de Usuarios
+                  Creacion de Usuarios
                 </h6>
               </div>
             </div>
           </div>
           <div class="card-body">
-            <form action="" id="form">
+            <form action="" id="form-usuarios">
               <div class="row">
+                <input type="hidden" name="id">
                 <div class="col-md-4">
                   <div class="form-group">
                     <input
-                      type="date"
-                      name=""
+                      type="text"
+                      name="userName"
                       id=""
                       class="form-control form-control-sm"
-                      disabled
+                      placeholder="Nombre de usuario"
+                      required
                     />
                   </div>
                 </div>
                 <div class="col-md-4">
                   <div class="form-group">
                     <input
-                      type="date"
-                      name=""
+                      type="password"
+                      name="password"
                       id=""
                       class="form-control form-control-sm"
-                      disabled
+                      placeholder="Contrasena"
+                      required
                     />
                   </div>
                 </div>
                 <div class="col-md-4">
                   <div class="form-group">
-                    <!-- input aqui -->
+                    <select name="permiso" id="" class="form-control form-control-sm" required>
+                      <option value="">Seleccione un permiso</option>
+                      <option value="Ventas">Ventas</option>
+                      <option value="Admin">Administrador</option>
+                    </select>
                   </div>
+                </div>
+                <div class="col-md-4">
+                  <button class="btn btn-primary btn-sm" id="btn-usuarios">Crear</button>
                 </div>
               </div>
             </form>
@@ -231,7 +241,7 @@
         <div class="card-header">
           <div class="col">
             <h6 class="text-black text-uppercase ls-1 mb-1">
-              Datos Generales de usuarios
+              Lista de usuarios
             </h6>
           </div>
           <div class="table-responsive">
@@ -243,11 +253,8 @@
               <thead>
                 <tr>
                   <th>Acciones</th>
-                  <th>Cod Barra</th>
-                  <th>Cantidad</th>
-                  <th>Nombre</th>
-                  <th>Precio</th>
-                  <th>Importe</th>
+                  <th>Usuario</th>
+                  <th>Permiso</th>
                 </tr>
               </thead>
               <tbody id="table-usuarios"></tbody>
@@ -284,3 +291,5 @@
     </footer>
   </div>
 </div>
+
+

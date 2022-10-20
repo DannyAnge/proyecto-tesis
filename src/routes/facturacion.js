@@ -9,14 +9,15 @@ const {
   getProducto,
   ticket,
   agregarProductoInventario
-} = require("../controllers/facturacion.controller");
+} = require("../models/facturacion.model");
+const {isLoggedIn} = require('../lib/auth')
 
-router.get("/facturacion/ultimaFactura", ultimaFactura);
-router.post("/facturacion/guardar", guardarFactura);
-router.post("/facturacion/busquedaPorNombre", buscarPorNombre);
-router.post("/facturacion/getProducto", getProducto);
-router.get("/facturacion/ticket", ticket);
-router.post('/facturacion/venderId', venderId)
-router.post('/facturacion/agregarInventario', agregarProductoInventario)
+router.get("/facturacion/ultimaFactura",isLoggedIn,  ultimaFactura);
+router.post("/facturacion/guardar",isLoggedIn,  guardarFactura);
+router.post("/facturacion/busquedaPorNombre",isLoggedIn,  buscarPorNombre);
+router.post("/facturacion/getProducto",isLoggedIn,  getProducto);
+router.get("/facturacion/ticket",isLoggedIn,  ticket);
+router.post('/facturacion/venderId',isLoggedIn,  venderId)
+router.post('/facturacion/agregarInventario',isLoggedIn,  agregarProductoInventario)
 
 module.exports = router;
