@@ -1,4 +1,3 @@
-const { render } = require("ejs");
 const conexion = require("../conexion");
 
 const guardar = async (req, res) => {

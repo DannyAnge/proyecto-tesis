@@ -95,7 +95,12 @@ class Productos {
       })
         .then((message) => message.text())
         .then((message) => {
-          alert(message);
+          swal.fire({
+            title:'Exito.',
+            text : message,
+            icon: 'success',
+            timer : 2000
+          })
           this.form.reset();
           this.mostrar();
         })
@@ -210,7 +215,12 @@ class Productos {
       })
         .then((message) => message.text())
         .then((message) => {
-          alert(message);
+          swal.fire({
+            title:'Exito.',
+            text : message,
+            icon: 'success',
+            timer : 2000
+          })
           document.getElementById("guardarProducto").disabled = false;
           document.getElementById("actualizarProducto").disabled = true;
           this.form.reset();

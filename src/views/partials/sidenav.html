@@ -36,6 +36,7 @@
                 <span class="nav-link-text">Inventario</span>
               </a>
             </li>
+            <% if(user.permiso == 'Admin'){ %>
             <li class="nav-item" id="opcion-usuarios">
               <a class="nav-link" href="#/usuarios">
                 <i class="ni ni-single-02 text-default"></i>
@@ -54,6 +55,7 @@
                 <span class="nav-link-text">Perfil</span>
               </a>
             </li>
+            <% } %>
             <li class="nav-item">
               <a class="nav-link" href="/logout">
                 <i class="ni ni-archive-2 text-dark"></i>

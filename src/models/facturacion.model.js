@@ -66,7 +66,7 @@ const getProducto = async (req, res) => {
     const message = await venderCodigoBarra(codigoBarra, cantidad);
     if (message[0][0].message === "exito") {
       const producto = await conexion.query(
-        "SELECT * FROM productos WHERE codigoBarra = ?",
+        "SELECT p.*,m.nombre AS nombreMarca FROM productos AS p INNER JOIN marca AS m ON(p.marca=m.id) WHERE p.codigoBarra = ?",
         [codigoBarra]
       );
       res.send(producto);

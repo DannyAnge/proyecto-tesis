@@ -95,7 +95,7 @@ class Reportes {
     })
       .then((info) => info.json())
       .then((info) => {
-        this.template = `<tr>
+        this.template = `<tr id="${info[0].id}">
                                 <td>${info[0].id}</td>
                                 <td>${moment(info[0].fecha).format(
                                   "ddd, DD-MMM-yyyy"
@@ -104,9 +104,14 @@ class Reportes {
                                 <td>${parseFloat(info[0].totalFactura).toFixed(
                                   2
                                 )}</td>
-				<td>
-                              		<button class="fa fa-edit btn btn-info btn-sm" btn="btnDetallesFactura"></button>
-				</td>
+				                        <td>
+                                  <button 
+                                    class="fa fa-edit btn btn-info btn-sm"
+                                    btn="btnDetallesFactura"
+                                    data-target="#modalDetalles"
+                                    data-toggle="modal"
+                                    ></button>
+				                        </td>
                             </tr>
             `;
         document.getElementById("tbl-facturas").innerHTML = this.template;
@@ -165,8 +170,13 @@ class Reportes {
       }),
     })
       .then((message) => message.text())
-      .then((message) => {
-        alert(message);
+      .then(async(message) => {
+        await swal.fire({
+          title : 'Exito.',
+          text :message, 
+          icon : 'success',
+          timer :2000
+        })
         this.getDetallesFactura();
         this.getFacturas();
       })
@@ -201,20 +211,29 @@ document.getElementById("tbl-facturas").addEventListener("click", (e) => {
   }
 });
 
-document.getElementById("table-detalles").addEventListener("click", (e) => {
+document.getElementById("table-detalles").addEventListener("click", async(e) => {
   let btn = e.target.getAttribute("btn");
   let detalle, producto, precio, factura;
   if (btn == "btnDevolverDetalle") {
     //reportes.getDetallesFactura();
-    let cantidad = prompt("Cantidad a devolver:", 0);
-    if (cantidad > 0) {
-      detalle = e.target.parentElement.parentElement.getAttribute("id");
-      producto =
-        e.target.parentElement.parentElement.getAttribute("idProducto");
-      precio =
-        e.target.parentElement.parentElement.getAttribute("precioProducto");
-      factura = e.target.parentElement.parentElement.getAttribute("factura");
-      reportes.devolver(detalle, cantidad, producto, precio, factura);
+    //let cantidad = prompt("Cantidad a devolver:", 0);
+    let { value: devolver } = await swal.fire({
+      title: 'Devoluciones',
+      input: 'number',
+      inputLabel: 'Cant.',
+      inputPlaceholder: 'Ingrese cantidad a devolver'
+    })
+
+    if (devolver) {
+      if(devolver != ''){
+        detalle = e.target.parentElement.parentElement.getAttribute("id");
+        producto =
+          e.target.parentElement.parentElement.getAttribute("idProducto");
+        precio =
+          e.target.parentElement.parentElement.getAttribute("precioProducto");
+        factura = e.target.parentElement.parentElement.getAttribute("factura");
+        reportes.devolver(detalle, devolver, producto, precio, factura);
+      }
     }
   }
 });

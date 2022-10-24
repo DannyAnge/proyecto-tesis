@@ -109,9 +109,11 @@ class Facturacion {
     this.listaIds = [];
     this.listaProductos = [];
     this.formBuscar.reset();
-    this.formDatosFacturacion.reset();
+    document.forms["form-datos-facturacion"]["comprador"].value = "";
     document.getElementById("table-facturacion").innerHTML = "";
     document.getElementById("totalFactura").innerText = "0.00";
+    document.getElementById("fechaFactura").value =
+      moment().format("yyyy-MM-DD");
   }
 
   comprobarProductoFactura(params) {
@@ -134,9 +136,8 @@ class Facturacion {
     this.precioVenta = document.getElementById(`precio${params.id}`).innerText;
     this.importe = this.cantidad * this.precioVenta;
     document.getElementById("importe" + params.id).innerText = this.importe;
-    document.getElementById(
-      `cantidadProducto${params.id}`
-    ).innerText = this.cantidad;
+    document.getElementById(`cantidadProducto${params.id}`).innerText =
+      this.cantidad;
     this.calcularTotalFactura();
   }
 
@@ -187,14 +188,16 @@ class Facturacion {
       col = `
                 <td>
                   <button class="icon-trash btn btn-danger btn-sm" btn="eliminarProductoFacturacion"></button>
-                  <button class="btn btn-success btn-sm" btn="addproducto" data-target="#modalAddMas" data-toggle="modal">+</button>
+                  <button class="btn btn-success btn-sm" btn="addproducto">+</button>
                  <i class="icon-plus" style="color:green" btn="btnAgregarMasProducto"></i>
                 </td>
                 <td>${params.codigoBarra}</td>
                 <td id="${"cantidadProducto" + params.id}" >
                     1  
                 </td>
-                <td>${params.nombre}</td>
+                <td>${params.nombre} ${
+        params.nombreMarca != "--sin marca--" ? params.nombreMarca : ""
+      }</td>
                 <td id="precio${params.id}">${params.precioVenta}</td>
                 <td id="importe${params.id}">${params.precioVenta}</td>
     `;
@@ -261,21 +264,24 @@ class Facturacion {
             `precio${this.idproducto}`
           ).innerText;
           this.importe = this.cantidad * this.precioVenta;
-          document.getElementById(
-            "importe" + this.idproducto
-          ).innerText = this.importe;
+          document.getElementById("importe" + this.idproducto).innerText =
+            this.importe;
           document.getElementById(
             `cantidadProducto${this.idproducto}`
           ).innerText = this.cantidad;
           this.calcularTotalFactura();
         } else {
-          alert(message[0][0].message);
+          swal.fire({
+            title : 'Advertencia.',
+            text : message[0][0].message ,
+            icon: 'warning'
+          })
         }
       });
   }
 
   ticket() {
-    window.open("http://localhost:3000/facturacion/ticket");
+    window.open("http://localhost:5000/facturacion/ticket");
   }
 }
 
@@ -287,40 +293,55 @@ document.getElementById("form-facturacion").addEventListener("submit", (e) => {
   factura.agregarProducto();
 });
 
-document.getElementById("table-facturacion").addEventListener("click", (e) => {
-  factura.btn = e.target.getAttribute("btn");
-  if (factura.btn === "eliminarProductoFacturacion") {
-    factura.idproducto = e.target.parentElement.parentElement.getAttribute(
-      "id"
-    );
-    factura.listaIds.find((id, i) => {
-      if (id == factura.idproducto) {
-        factura.listaIds.splice(i, 1);
-        factura.agregarInventario(
-          factura.idproducto,
-          document.getElementById("cantidadProducto" + factura.idproducto)
-            .innerText
-        );
-      }
-    });
-    factura.listaProductos.find((detalle, index) => {
-      try {
-        if (detalle.producto == factura.idproducto) {
-          factura.listaProductos.splice(index, 1);
-          e.target.parentElement.parentElement.remove();
+document
+  .getElementById("btnAgregarProductoFactura")
+  .addEventListener("click", () => {
+    factura.agregarProducto();
+  });
+
+document
+  .getElementById("table-facturacion")
+  .addEventListener("click", async (e) => {
+    factura.btn = e.target.getAttribute("btn");
+    if (factura.btn === "eliminarProductoFacturacion") {
+      factura.idproducto =
+        e.target.parentElement.parentElement.getAttribute("id");
+      factura.listaIds.find((id, i) => {
+        if (id == factura.idproducto) {
+          factura.listaIds.splice(i, 1);
+          factura.agregarInventario(
+            factura.idproducto,
+            document.getElementById("cantidadProducto" + factura.idproducto)
+              .innerText
+          );
         }
-      } catch (error) {
-        console.log(error);
+      });
+      factura.listaProductos.find((detalle, index) => {
+        try {
+          if (detalle.producto == factura.idproducto) {
+            factura.listaProductos.splice(index, 1);
+            e.target.parentElement.parentElement.remove();
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      });
+      factura.calcularTotalFactura();
+    } else if (factura.btn == "addproducto") {
+      factura.idproducto =
+        e.target.parentElement.parentElement.getAttribute("id");
+      let { value: cantidad } = await swal.fire({
+        title: "Agregar",
+        input: "number",
+        inputLabel: "Cantidad:",
+        inputPlaceholder: "Cant.",
+      });
+
+      if (cantidad) {
+        factura.addProductoBoton(cantidad);
       }
-    });
-    factura.calcularTotalFactura();
-  } else if (factura.btn == "addproducto") {
-    factura.idproducto = e.target.parentElement.parentElement.getAttribute(
-      "id"
-    );
-    //let cantidad = prompt("cantidad:", 0);
-  }
-});
+    }
+  });
 
 document.getElementById("btnGuardarFactura").addEventListener("click", () => {
   factura.setDatosFacturacion();
@@ -347,10 +368,3 @@ document
 document.getElementById("btnLimpiarFactura").addEventListener("click", () => {
   factura.limpiar();
 });
-
-document.getElementById('addMas').addEventListener('submit',(e)=>{
-    e.preventDefault();
-    let cantidad = document.forms['addMas']['cantidad'].value;
-    factura.addProductoBoton(cantidad);
-    $('#modalAddMas').modal('toggle');
-})

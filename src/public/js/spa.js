@@ -46,7 +46,6 @@ const styleOpciones = () => {
     listOpciones.map(
         opcion => {
             validar = opcion.classList.contains('option-active');
-            console.log(validar)
             if (validar) {
                 opcion.classList.remove('option-active');
             }
@@ -87,7 +86,6 @@ const router = (rutas) => {
 
 document.querySelector('.navbar-nav').addEventListener('click', (click) => {
     let opcion = click.target.parentElement.parentElement.getAttribute('id');
-    console.log(opcion)
     switch (opcion) {
         case 'opcion-facturacion': {
             styleOpciones();

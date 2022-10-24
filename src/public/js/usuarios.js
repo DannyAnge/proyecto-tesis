@@ -131,7 +131,7 @@ const user = new Usuarios();
 
 user.formulario.addEventListener("submit", (event) => {
   event.preventDefault();
-  if (this.bandera) {
+  if (user.bandera) {
     user.guardar();
   } else {
     user.actualizar();

@@ -30,7 +30,6 @@
               </div>
             </div>
           </div>
-
           <div class="card-body">
             <form action="" id="form-productos">
               <div class="row">
@@ -42,6 +41,9 @@
                       id="CodigoBarraProducto"
                       class="form-control form-control-sm"
                       placeholder="Código Barras"
+                      <% if(user.permiso == 'Ventas'){ %>
+                        disabled
+                      <% } %>
                     />
                     <span
                       id="validacion-codBarra"
@@ -58,6 +60,9 @@
                       name="nombre"
                       id="nombreProducto"
                       placeholder="Nombre"
+                      <% if(user.permiso == 'Ventas'){ %>
+                        disabled
+                      <% } %>
                     />
                   </div>
                 </div>
@@ -69,6 +74,9 @@
                       name="precioCompra"
                       id="precioCompraProducto"
                       placeholder="Precio Compra"
+                      <% if(user.permiso == 'Ventas'){ %>
+                        disabled
+                      <% } %>
                     />
                   </div>
                 </div>
@@ -80,6 +88,9 @@
                       name="precioVenta"
                       id="precioVentaProducto"
                       placeholder="Precio Venta"
+                      <% if(user.permiso == 'Ventas'){ %>
+                        disabled
+                      <% } %>
                     />
                   </div>
                 </div>
@@ -91,6 +102,9 @@
                       class="form-control form-control-sm"
                       id="stockProducto"
                       placeholder="Cantidad"
+                      <% if(user.permiso == 'Ventas'){ %>
+                        disabled
+                      <% } %>
                     />
                   </div>
                 </div>
@@ -102,6 +116,9 @@
                       class="form-control form-control-sm"
                       id="descripcionProducto"
                       placeholder="Descripción"
+                      <% if(user.permiso == 'Ventas'){ %>
+                        disabled
+                      <% } %>
                     />
                   </div>
                 </div>
@@ -111,6 +128,9 @@
                       name="categoria"
                       id="cmbCategoriasProducto"
                       class="form-control form-control-sm"
+                      <% if(user.permiso == 'Ventas'){ %>
+                        disabled
+                      <% } %>
                     ></select>
                   </div>
                 </div>
@@ -120,6 +140,9 @@
                       name="marca"
                       id="cmbMarcaProducto"
                       class="form-control form-control-sm"
+                      <% if(user.permiso == 'Ventas'){ %>
+                        disabled
+                      <% } %>
                     ></select>
                   </div>
                 </div>
@@ -129,6 +152,9 @@
                 type="button"
                 id="guardarProducto"
                 class="btn-1 btn btn-xs btn-success btn-sm icon-floppy"
+                <% if(user.permiso == 'Ventas'){ %>
+                        disabled
+                      <% } %>
               >
                 Enviar
               </button>
@@ -136,6 +162,9 @@
                 type="button"
                 id="actualizarProducto"
                 class="btn-1 btn btn-xs btn-info btn-sm icon-arrows-cw"
+                <% if(user.permiso == 'Ventas'){ %>
+                        disabled
+                      <% } %>
               >
                 Actualizar
               </button>

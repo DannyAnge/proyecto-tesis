@@ -16,7 +16,7 @@ router.get("/facturacion/ultimaFactura",isLoggedIn,  ultimaFactura);
 router.post("/facturacion/guardar",isLoggedIn,  guardarFactura);
 router.post("/facturacion/busquedaPorNombre",isLoggedIn,  buscarPorNombre);
 router.post("/facturacion/getProducto",isLoggedIn,  getProducto);
-router.get("/facturacion/ticket",isLoggedIn,  ticket);
+router.get("/facturacion/ticket",  ticket);
 router.post('/facturacion/venderId',isLoggedIn,  venderId)
 router.post('/facturacion/agregarInventario',isLoggedIn,  agregarProductoInventario)
 
