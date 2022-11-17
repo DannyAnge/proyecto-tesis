@@ -137,6 +137,15 @@ const isExisteCodBarra = async (req, res) => {
   }
 };
 
+const productosMinStock = async (req,res)=>{
+  try {
+   const list = await conexion.query("SELECT * FROM productos WHERE stock = 0");
+   res.send(list); 
+  } catch (error) {
+   console.log(error) 
+  }
+}
+
 module.exports = {
   guardar,
   actualizar,
@@ -146,4 +155,5 @@ module.exports = {
   getCategorias,
   getMarcas,
   isExisteCodBarra,
+  productosMinStock
 };

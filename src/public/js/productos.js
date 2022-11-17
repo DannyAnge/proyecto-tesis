@@ -133,7 +133,7 @@ class Productos {
                           <td>${producto.nombre}</td>
                           <td>${producto.precioCompra}</td>
                           <td>${producto.precioVenta}</td>
-                          <td>${producto.stock}</td>
+                          <td class="${(producto.stock==0) ? 'text-danger' : ''}">${producto.stock}</td>
                           <td>${producto.descripcion}</td>
                           <td>${producto.categoria}</td>
                           <td>${producto.marca}</td>
@@ -263,6 +263,26 @@ class Productos {
       })
       .catch((error) => console.log(error));
   }
+
+  getProductosMinStock(){
+    fetch('/productos/minStock')
+    .then(productos=>productos.json())
+    .then(productos=>{
+        productos.map(producto=>{
+          this.template += `
+              <tr>
+                <td>${producto.id}</td>
+                <td>${producto.nombre}</td>
+                <td>${producto.stock}</td>
+              </tr>
+          `;
+        }) 
+        document.getElementById('table-productos-min-stock').innerHTML = this.template;
+    })
+    .catch(error=>console.log(error))
+    .finally(this.template = "");
+
+  }
 }
 
 var producto = new Productos();
@@ -304,4 +324,8 @@ document.getElementById("CodigoBarraProducto").addEventListener("keyup", () => {
     document.getElementById("CodigoBarraProducto").value
   );
 });
+
+document.getElementById('btn-min-stock').addEventListener('click',()=>{
+  producto.getProductosMinStock();
+})
 

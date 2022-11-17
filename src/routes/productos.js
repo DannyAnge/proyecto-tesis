@@ -9,7 +9,8 @@ const {
     eliminar,
     getCategorias,
     getMarcas,
-    isExisteCodBarra
+    isExisteCodBarra,
+    productosMinStock
 } = require('../models/productos.model')
 
 const {isLoggedIn} = require('../lib/auth')
@@ -29,5 +30,7 @@ router.get('/productos/getCategorias',isLoggedIn,  getCategorias)
 router.get('/productos/getMarcas',isLoggedIn,  getMarcas)
 
 router.post('/productos/codBarra',isLoggedIn,  isExisteCodBarra)
+
+router.get('/productos/minStock',isLoggedIn, productosMinStock)
 
 module.exports = router;

@@ -11,7 +11,6 @@ passport.use('local.login', new LocalStrategy({
 },async (req, userName, password, done)=>{
     console.log(userName)
     const rows = await conexion.query("SELECT * FROM usuarios WHERE nombreUsuario = ?",[userName]);
-    console.log(rows)
     if(rows.length > 0){
         const user = rows[0];
         const validPassword = await helpers.validar(password, user.password);
